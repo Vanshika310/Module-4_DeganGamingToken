@@ -29,7 +29,7 @@ contract DegenGamingToken {
         _;
     }
 
-     {
+     constructor(uint256 initialSupply) {
         totalSupply = initialSupply * 10**uint256(decimals);
         balanceOf[msg.sender] = totalSupply;
         owner = msg.sender;
