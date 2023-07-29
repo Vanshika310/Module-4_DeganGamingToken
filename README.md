@@ -27,6 +27,7 @@ The README file describes the smart contract used for the Avalanche network-de
         event Approval(address indexed owner, address indexed spender, uint256 value);
         event Mint(address indexed to, uint256 value);
         event Burn(address indexed from, uint256 value);
+        event RedeemPrize(address indexed user, string prize, uint256 cost);
         event LockTokens(address indexed from, uint256 amount, uint256 unlockTime);
         event UnlockTokens(address indexed from, uint256 amount);
     
@@ -76,6 +77,16 @@ The README file describes the smart contract used for the Avalanche network-de
             
             emit Burn(msg.sender, value);
         }
+
+        function redeemPrize(string memory prize, uint256 cost) external returns (bool) {
+            require(cost <= balanceOf[msg.sender], "Insufficient balance for redemption");
+            require(cost > 0, "Cost must be greater than zero");
+
+            balanceOf[msg.sender] -= cost;
+            emit RedeemPrize(msg.sender, prize, cost);
+
+            return true;
+        }
     
         function lockTokens(uint256 amount, uint256 lockDuration) external {
             require(amount <= balanceOf[msg.sender], "Insufficient balance");
@@ -111,7 +122,7 @@ Decimals: 18
 Total Supply: The quantity of tokens in use is represented by the initial supply, which is determined upon deployment.
 Owner: The contract's owner is the address that deployed it, and this address has specific rights.
 
-_**Minting New Tokens:**_ The exclusive authority to produce new tokens rests with the platform owner. The mint feature enables the owner to create extra tokens and give them away as prizes to players. _**Transferring Tokens:**_ By using the transfer feature, players may send their DGN tokens to different addresses. Peer-to-peer token transfers are made possible via this capability, making it easier for members of the Degen Gaming community to trade and give gifts. _**Exchange of Tokens:**_ Players may trade their DGN tokens for a variety of in-game products or advantages on the Degen Gaming platform. Although the redemption procedure takes place off-chain, users can still burn redeemed tokens after they have been used._** Verifying the Token Balance:**_ The balanceOf function allows users to view their current DGN token balance at any moment. Users can check how many tokens they presently possess using this method. _**Tokens that Burn:**_ By invoking the burn feature, any token holder can withdraw all of their tokens from circulation forever. When users no longer require their tokens and want to lower their token holdings, this option is quite helpful. _**Tokens for locking and unlocking:**_ With the help of the lockTokens function, token owners can lock a set number of their tokens for a specified time period. These tokens can only be accessed again when the lock period has passed. Users can utilize the unlockTokens method to get their tokens back after the lock period.
+_**Minting New Tokens:**_ The exclusive authority to produce new tokens rests with the platform owner. The mint feature enables the owner to create extra tokens and give them away as prizes to players. _**Transferring Tokens:**_ By using the transfer feature, players may send their DGN tokens to different addresses. Peer-to-peer token transfers are made possible via this capability, making it easier for members of the Degen Gaming community to trade and give gifts. _**Exchange of Tokens:**_ Players may trade their DGN tokens for a variety of in-game products or advantages on the Degen Gaming platform. Although the redemption procedure takes place off-chain, users can still burn redeemed tokens after they have used._** Verifying the Token Balance:**_ The balanceOf function allows users to view their current DGN token balance at any moment. Users can check how many tokens they presently possess using this method. _**Tokens that Burn:**_ By invoking the burn feature, any token holder can withdraw all of their tokens from circulation forever. When users no longer require their tokens and want to lower their token holdings, this option is quite helpful. **_Redeem Prize Function:_** The redeemPrize function is a smart contract function written in Solidity, designed to be executed on the Ethereum blockchain. It allows token holders to redeem a prize by spending a certain amount of their tokens. The function ensures that the caller has a sufficient balance to cover the redemption cost and that the redemption cost is a valid positive value. _**Tokens for locking and unlocking:**_ With the help of the lockTokens function, token owners can lock a set number of their tokens for a specified period. These tokens can only be accessed again when the lock period has passed. Users can utilize the unlockTokens method to get their tokens back after the lock period.
 
 
 ## Lincense
