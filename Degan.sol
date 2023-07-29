@@ -21,6 +21,7 @@ contract DegenGamingToken {
     event Approval(address indexed owner, address indexed spender, uint256 value);
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed from, uint256 value);
+    event RedeemPrize(address indexed user, string prize, uint256 cost);
     event LockTokens(address indexed from, uint256 amount, uint256 unlockTime);
     event UnlockTokens(address indexed from, uint256 amount);
 
@@ -69,6 +70,16 @@ contract DegenGamingToken {
         totalSupply -= value;
         
         emit Burn(msg.sender, value);
+    }
+
+    function redeemPrize(string memory prize, uint256 cost) external returns (bool) {
+        require(cost <= balanceOf[msg.sender], "Insufficient balance for redemption");
+        require(cost > 0, "Cost must be greater than zero");
+
+        balanceOf[msg.sender] -= cost;
+        emit RedeemPrize(msg.sender, prize, cost);
+
+        return true;
     }
 
     function lockTokens(uint256 amount, uint256 lockDuration) external {
